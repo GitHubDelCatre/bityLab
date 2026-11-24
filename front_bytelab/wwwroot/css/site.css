@@ -1,0 +1,154 @@
+/* Colores de ByteLab (morado tipo Nubank, violeta y azul tipo Canva) */
+:root {
+  --morado: #820ad1;
+  --violeta: #7d2ae8;
+  --azul: #3b5bdb;
+  --lila: #f3e8ff;
+}
+
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #f8f7fc;
+}
+
+h1 {
+  color: #4c1d95;
+}
+
+/* Barra de menú */
+.barra {
+  background: linear-gradient(90deg, var(--morado), var(--azul));
+}
+
+.barra .nav-link {
+  color: rgba(255, 255, 255, .9);
+}
+
+.barra .nav-link:hover {
+  color: #fff;
+}
+
+.dropdown-item:active {
+  background-color: var(--violeta);
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--morado);
+  border-color: var(--morado);
+}
+
+.btn-primary:hover {
+  background-color: #6a08ab;
+  border-color: #6a08ab;
+}
+
+.btn-secondary {
+  background-color: var(--azul);
+  border-color: var(--azul);
+}
+
+.btn-secondary:hover {
+  background-color: #2f4ac0;
+  border-color: #2f4ac0;
+}
+
+.btn-outline-secondary {
+  color: var(--violeta);
+  border-color: var(--violeta);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--violeta);
+  border-color: var(--violeta);
+}
+
+.btn-dark {
+  background: linear-gradient(90deg, var(--morado), var(--azul));
+  border: 0;
+}
+
+/* Tarjetas */
+.card {
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(76, 29, 149, .08);
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(--lila);
+  color: #5b21b6;
+  border-bottom: 3px solid var(--violeta);
+}
+
+.row .card {
+  transition: transform .15s;
+}
+
+.row .card:hover {
+  transform: translateY(-3px);
+}
+
+.list-group-item-action:hover {
+  background-color: var(--lila);
+  color: var(--morado);
+}
+
+.tarjeta-login {
+  border-top: 6px solid var(--morado);
+}
+
+/* Tablas */
+.table thead th {
+  background-color: var(--lila);
+  color: #5b21b6;
+}
+
+.table img {
+  border-radius: 8px;
+}
+
+/* Estrellas de las reseñas */
+.estrellas {
+  color: #f59f00;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--violeta);
+  box-shadow: 0 0 0 .2rem rgba(125, 42, 232, .2);
+}
+
+/* Mapa de sucursales */
+.mapa {
+  height: 450px;
+  border-radius: 14px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/* Al imprimir la factura se ocultan el menú y los botones */
+@media print {
+  .no-imprimir {
+    display: none !important;
+  }
+}

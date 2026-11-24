@@ -1,0 +1,217 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+@if (!Model.EstaLogueado)
+{
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <form method="post" class="card tarjeta-login p-4">
+                <div class="text-center">
+                    <img src="~/img/logo.svg" alt="" width="56" height="56" />
+                    <h2 class="mt-2">ByteLab</h2>
+                    <h5 class="mb-3">Iniciar sesión</h5>
+                </div>
+                @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+                <div class="mb-3">
+                    <label class="form-label">Correo</label>
+                    <input asp-for="@Model.Correo" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" asp-for="@Model.Contrasena" class="form-control" />
+                </div>
+                <input type="submit" value="Ingresar" class="btn btn-dark w-100" asp-page-handler="BtEntrar" />
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+    <div class="text-center mb-4">
+        <h1 class="display-5">Bienvenido a ByteLab</h1>
+        <p class="text-muted">@Sesion.NombreUsuario(HttpContext) · Rol: @Sesion.NombreRol(HttpContext)</p>
+    </div>
+    <div class="row g-3">
+        @if (Sesion.TieneAlguno(HttpContext, "Roles", "Permisos", "RolesPermisos", "Usuarios", "Auditorias"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Seguridad</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Roles"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Roles">Roles</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Permisos"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Permisos">Permisos</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "RolesPermisos"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/RolesPermisos">Permisos por rol</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Usuarios"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Usuarios">Usuarios</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Auditorias"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Auditorias">Auditorías</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "Sucursales", "Empleados", "Clientes"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Sedes y personal</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Sucursales"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Sucursales">Sucursales</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Empleados"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Empleados">Empleados</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Clientes"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Clientes">Clientes</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "Categorias", "Marcas", "Productos", "Resenas"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Catálogo</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Categorias"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Categorias">Categorías</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Marcas"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Marcas">Marcas</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Productos"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Productos">Productos</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Resenas"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Resenas">Reseñas</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "Inventarios", "Proveedores", "ComprasProductos", "DetallesOrdenesCompras"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Inventario y compras</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Inventarios"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Inventarios">Inventarios</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Proveedores"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Proveedores">Proveedores</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "ComprasProductos"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/ComprasProductos">Órdenes de compra</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "DetallesOrdenesCompras"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/DetallesOrdenesCompras">Detalles de órdenes de compra</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "Promociones", "Ventas", "DetallesVentas", "MetodosPago", "Pagos", "Devoluciones", "Garantias"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Ventas</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Promociones"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Promociones">Promociones</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Ventas"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Ventas">Ventas</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "DetallesVentas"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/DetallesVentas">Detalles de ventas</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "MetodosPago"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/MetodosPago">Métodos de pago</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Pagos"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Pagos">Pagos</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Devoluciones"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Devoluciones">Devoluciones</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Garantias"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Garantias">Garantías</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "EmpresasPaqueteria", "Envios"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Logística</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "EmpresasPaqueteria"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/EmpresasPaqueteria">Empresas de paquetería</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Envios"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Envios">Envíos</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Sesion.TieneAlguno(HttpContext, "Reportes", "Mapa"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">Herramientas</div>
+                    <div class="list-group list-group-flush">
+                        @if (Sesion.TienePermiso(HttpContext, "Reportes"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Reportes">Reportes PDF / Excel</a>
+                        }
+                        @if (Sesion.TienePermiso(HttpContext, "Mapa"))
+                        {
+                            <a class="list-group-item list-group-item-action" asp-page="/Ventanas/Mapa">Mapa de sucursales</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

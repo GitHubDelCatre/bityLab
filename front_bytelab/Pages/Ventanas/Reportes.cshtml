@@ -1,0 +1,61 @@
+﻿@page
+@model ReportesModel
+@{
+    ViewData["Title"] = "Reportes";
+}
+<form method="post">
+    <h1 class="text-center">Reportes</h1>
+    @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+
+    <p class="text-center">
+        Total vendido: <b>$ @Model.TotalVendido.ToString("N0")</b> ·
+        Ventas: <b>@Model.NumeroVentas</b> ·
+        Productos para reordenar: <b>@Model.BajoStock.Count</b>
+    </p>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <h4>Ventas por sucursal</h4>
+            <input type="submit" value="Descargar PDF" class="btn btn-outline-secondary btn-sm mb-2" asp-page-handler="BtVentasSucursalPdf" />
+            <table class="table table-bordered table-striped">
+                <thead class="table-light"><tr><th>Sucursal</th><th>Ventas</th><th>Total</th></tr></thead>
+                <tbody>
+                    @foreach (var fila in Model.VentasPorSucursal)
+                    {
+                        <tr><td>@fila.Sucursal</td><td>@fila.Cantidad</td><td>$ @fila.Total.ToString("N0")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h4>Bajo stock mínimo</h4>
+            <input type="submit" value="Descargar PDF" class="btn btn-outline-secondary btn-sm mb-2" asp-page-handler="BtBajoStockPdf" />
+            <table class="table table-bordered table-striped">
+                <thead class="table-light"><tr><th>Producto</th><th>Sucursal</th><th>Disponible</th><th>Mínimo</th></tr></thead>
+                <tbody>
+                    @foreach (var inventario in Model.BajoStock)
+                    {
+                        <tr><td>@inventario._Producto</td><td>@inventario._Sucursal</td><td>@inventario.CantidadDisponible</td><td>@inventario.StockMinimo</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h4>Productos más vendidos</h4>
+            <input type="submit" value="Descargar Excel" class="btn btn-outline-secondary btn-sm mb-2" asp-page-handler="BtMasVendidosExcel" />
+            <table class="table table-bordered table-striped">
+                <thead class="table-light"><tr><th>Producto</th><th>Unidades</th><th>Total</th></tr></thead>
+                <tbody>
+                    @foreach (var fila in Model.MasVendidos)
+                    {
+                        <tr><td>@fila.Producto</td><td>@fila.Unidades</td><td>$ @fila.Total.ToString("N0")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h4>Todas las ventas</h4>
+            <input type="submit" value="Descargar Excel" class="btn btn-outline-secondary btn-sm" asp-page-handler="BtVentasExcel" />
+        </div>
+    </div>
+</form>

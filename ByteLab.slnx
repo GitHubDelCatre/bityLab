@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="lib_bytelab/lib_bytelab.csproj" />
+  <Project Path="servicio_bytelab/servicio_bytelab.csproj" />
+  <Project Path="presentaciones_bytelab/presentaciones_bytelab.csproj" />
+  <Project Path="front_bytelab/front_bytelab.csproj" />
+  <Project Path="pruebas_bytelab/pruebas_bytelab.csproj" />
+</Solution>

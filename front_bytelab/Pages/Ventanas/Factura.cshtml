@@ -1,0 +1,75 @@
+﻿@page
+@model FacturaModel
+@{
+    ViewData["Title"] = "Factura";
+}
+@await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+@if (Model.Venta == null)
+{
+    <p>No se encontró la venta.</p>
+}
+else
+{
+    <div class="no-imprimir mb-3">
+        <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>
+        <a class="btn btn-secondary" asp-page="/Ventanas/Ventas">Volver</a>
+    </div>
+    <div class="border p-4 bg-white">
+        <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+            <div>
+                <h2>ByteLab</h2>
+                <div>Tienda de Hardware - NIT 901.000.000-1</div>
+                <div>@Model.Venta._Sucursal</div>
+            </div>
+            <div class="text-end">
+                <h4>Factura No. @Model.Venta.Id</h4>
+                <div>Fecha: @Model.Venta.FechaVenta?.ToString("yyyy-MM-dd HH:mm")</div>
+                <div>Estado: @Model.Venta.EstadoVenta</div>
+            </div>
+        </div>
+        <p>
+            <b>Cliente:</b> @Model.Venta._Cliente<br />
+            <b>Dirección de envío:</b> @(Model.Venta.DireccionEnvio ?? "Entrega en tienda")<br />
+            <b>Promoción:</b> @(Model.Venta._Promocion?.ToString() ?? "Ninguna")
+        </p>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Descuento</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var detalle in Model.Detalles)
+                {
+                    <tr>
+                        <td>@detalle._Producto</td>
+                        <td>@detalle.Cantidad</td>
+                        <td>$ @detalle.PrecioUnitarioVenta?.ToString("N0")</td>
+                        <td>$ @detalle.DescuentoAplicado?.ToString("N0")</td>
+                        <td>$ @detalle.Subtotal?.ToString("N0")</td>
+                    </tr>
+                }
+                <tr><td colspan="4" class="text-end">Suma de productos</td><td>$ @Model.SumaDetalles.ToString("N0")</td></tr>
+                <tr><td colspan="4" class="text-end fw-bold">TOTAL A PAGAR</td><td class="fw-bold">$ @Model.Venta.TotalPagar?.ToString("N0")</td></tr>
+            </tbody>
+        </table>
+        @if (Model.Pagos.Count > 0)
+        {
+            <h5>Pagos</h5>
+            <table class="table table-bordered">
+                <thead class="table-light"><tr><th>Fecha</th><th>Método</th><th>Estado</th><th>Referencia</th><th>Monto</th></tr></thead>
+                <tbody>
+                    @foreach (var pago in Model.Pagos)
+                    {
+                        <tr>
+                            <td>@pago.FechaPago?.ToString("yyyy-MM-dd")</td>
+                            <td>@pago._MetodoPago</td>
+                            <td>@pago.EstadoTransaccion</td>
+                            <td>@pago.ReferenciaPasarela</td>
+                            <td>$ @pago.MontoPagado?.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <p class="text-center text-muted">Gracias por comprar en ByteLab</p>
+    </div>
+}

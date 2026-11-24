@@ -1,0 +1,55 @@
+﻿@page
+@model AuditoriasModel
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+<form method="post" enctype="multipart/form-data">
+    <h1 class="text-center">Auditorías</h1>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-center my-3">
+        <input type="submit" value="Consultar" class="btn btn-secondary" asp-page-handler="BtConsultar" />
+        <input asp-for="@Model.Filtro!.Entidad" class="form-control w-auto" placeholder="Buscar" />
+        <input type="submit" value="PDF" class="btn btn-outline-secondary" asp-page-handler="BtPdf" />
+        <input type="submit" value="Excel" class="btn btn-outline-secondary" asp-page-handler="BtExcel" />
+    </div>
+
+    @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+
+    @if (Model.Formulario || Model.Borrar)
+    {
+        <input type="hidden" asp-for="@Model.Actual!.Id" />
+    }
+
+    @if (!Model.Formulario)
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                    <th>Id</th>
+                    <th>Entidad</th>
+                    <th>Acción</th>
+                    <th>Id registro</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Datos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var elemento in Model.Lista)
+                    {
+                        <tr>
+                        <td>@elemento.Id</td>
+                        <td>@elemento.Entidad</td>
+                        <td>@elemento.Accion</td>
+                        <td>@elemento.IdRegistro</td>
+                        <td>@elemento.Usuario</td>
+                        <td>@elemento.Fecha?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@elemento.Datos</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</form>

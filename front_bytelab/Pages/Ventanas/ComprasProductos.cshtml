@@ -1,0 +1,118 @@
+﻿@page
+@model ComprasProductosModel
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+<form method="post" enctype="multipart/form-data">
+    <h1 class="text-center">Órdenes de compra</h1>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-center my-3">
+        <input type="submit" value="Consultar" class="btn btn-secondary" asp-page-handler="BtConsultar" />
+        <input type="submit" value="Nuevo" class="btn btn-secondary" asp-page-handler="BtNuevo" />
+        <input asp-for="@Model.Filtro!._Proveedor!.NombreEmpresa" class="form-control w-auto" placeholder="Buscar" />
+        <input type="submit" value="PDF" class="btn btn-outline-secondary" asp-page-handler="BtPdf" />
+        <input type="submit" value="Excel" class="btn btn-outline-secondary" asp-page-handler="BtExcel" />
+    </div>
+
+    @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+
+    @if (Model.Formulario || Model.Borrar)
+    {
+        <input type="hidden" asp-for="@Model.Actual!.Id" />
+    }
+
+    @if (Model.Formulario)
+    {
+        <div class="card mt-3">
+            <div class="card-header">@(Model.Actual!.Id == 0 ? "Nuevo registro" : "Editar registro " + Model.Actual!.Id)</div>
+            <div class="card-body row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Proveedor *</label>
+                    <select asp-for="@Model.Actual!.Proveedor" class="form-select"
+                            asp-items="@(new SelectList(Model.ListaProveedores, "Id", null))">
+                        <option value="0">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Sucursal *</label>
+                    <select asp-for="@Model.Actual!.Sucursal" class="form-select"
+                            asp-items="@(new SelectList(Model.ListaSucursales, "Id", null))">
+                        <option value="0">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de la orden *</label>
+                    <input type="datetime-local" asp-for="@Model.Actual!.FechaOrden" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Estado *</label>
+                    <select asp-for="@Model.Actual!.EstadoOrden" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Enviada">Enviada</option>
+                        <option value="Recibida">Recibida</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Total estimado (automático)</label>
+                    <input type="hidden" asp-for="@Model.Actual!.TotalEstimado" />
+                    <input class="form-control" readonly value="@(Model.Actual!.TotalEstimado?.ToString("N2"))" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Notas internas</label>
+                    <textarea asp-for="@Model.Actual!.NotasInternas" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Guardar" class="btn btn-primary" asp-page-handler="BtGuardar" />
+                <input type="submit" value="Cancelar" class="btn btn-secondary" asp-page-handler="BtConsultar" />
+            </div>
+        </div>
+    }
+
+    @if (Model.Borrar)
+    {
+        <div class="alert alert-warning mt-3">
+            ¿Quiere borrar <b>@Model.Actual</b>?
+            <input type="submit" value="Borrar" class="btn btn-danger btn-sm ms-2" asp-page-handler="BtBorrar" />
+            <input type="submit" value="Cancelar" class="btn btn-secondary btn-sm" asp-page-handler="BtConsultar" />
+        </div>
+    }
+
+    @if (!Model.Formulario)
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                    <th>Id</th>
+                    <th>Proveedor</th>
+                    <th>Sucursal</th>
+                    <th>Fecha de la orden</th>
+                    <th>Estado</th>
+                    <th>Total estimado</th>
+                    <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var elemento in Model.Lista)
+                    {
+                        <tr>
+                        <td>@elemento.Id</td>
+                        <td>@elemento._Proveedor</td>
+                        <td>@elemento._Sucursal</td>
+                        <td>@elemento.FechaOrden?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@elemento.EstadoOrden</td>
+                        <td>@elemento.TotalEstimado?.ToString("N2")</td>
+                        <td>
+                            <input type="submit" value="Editar" class="btn btn-secondary btn-sm" asp-page-handler="BtEditar" asp-route-data="@elemento.Id" />
+                            <input type="submit" value="Borrar" class="btn btn-danger btn-sm" asp-page-handler="BtPregBorrar" asp-route-data="@elemento.Id" />
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</form>

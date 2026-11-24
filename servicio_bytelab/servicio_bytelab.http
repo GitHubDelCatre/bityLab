@@ -1,0 +1,28 @@
+@servicio = http://localhost:5210
+
+### Estado del servicio y la base de datos
+GET {{servicio}}/salud
+
+### Consultar productos
+POST {{servicio}}/Productos/Consultar
+Content-Type: application/json
+
+null
+
+### Buscar productos por nombre
+POST {{servicio}}/Productos/Buscar
+Content-Type: application/json
+
+{ "NombreProducto": "Ryzen" }
+
+### Login
+POST {{servicio}}/Usuarios/Login
+Content-Type: application/json
+
+{ "Correo": "admin@bytelab.com", "Contrasena": "Admin.123" }
+
+### Auditorías de una entidad
+POST {{servicio}}/Auditorias/Buscar
+Content-Type: application/json
+
+{ "Entidad": "Productos" }

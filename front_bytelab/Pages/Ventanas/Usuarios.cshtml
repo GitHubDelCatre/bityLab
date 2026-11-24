@@ -1,0 +1,117 @@
+﻿@page
+@model UsuariosModel
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+<form method="post" enctype="multipart/form-data">
+    <h1 class="text-center">Usuarios</h1>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-center my-3">
+        <input type="submit" value="Consultar" class="btn btn-secondary" asp-page-handler="BtConsultar" />
+        <input type="submit" value="Nuevo" class="btn btn-secondary" asp-page-handler="BtNuevo" />
+        <input asp-for="@Model.Filtro!.NombreCompleto" class="form-control w-auto" placeholder="Buscar" />
+        <input type="submit" value="PDF" class="btn btn-outline-secondary" asp-page-handler="BtPdf" />
+        <input type="submit" value="Excel" class="btn btn-outline-secondary" asp-page-handler="BtExcel" />
+    </div>
+
+    @await Html.PartialAsync("/Pages/Emergentes/Mensajes.cshtml")
+
+    @if (Model.Formulario || Model.Borrar)
+    {
+        <input type="hidden" asp-for="@Model.Actual!.Id" />
+    }
+
+    @if (Model.Formulario)
+    {
+        <div class="card mt-3">
+            <div class="card-header">@(Model.Actual!.Id == 0 ? "Nuevo registro" : "Editar registro " + Model.Actual!.Id)</div>
+            <div class="card-body row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Rol *</label>
+                    <select asp-for="@Model.Actual!.Rol" class="form-select"
+                            asp-items="@(new SelectList(Model.ListaRoles, "Id", null))">
+                        <option value="0">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre completo *</label>
+                    <input asp-for="@Model.Actual!.NombreCompleto" class="form-control" maxlength="100" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cédula *</label>
+                    <input asp-for="@Model.Actual!.Cedula" class="form-control" maxlength="20" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Correo *</label>
+                    <input asp-for="@Model.Actual!.Correo" class="form-control" maxlength="100" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" asp-for="@Model.Actual!.Contrasena" class="form-control" placeholder="@(Model.Actual!.Id == 0 ? "" : "Vacía = no cambiar")" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de registro (automático)</label>
+                    <input type="hidden" asp-for="@Model.Actual!.FechaRegistro" />
+                    <input class="form-control" readonly value="@(Model.Actual!.FechaRegistro?.ToString("yyyy-MM-dd HH:mm"))" />
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" asp-for="@Model.Actual!.CuentaActiva" class="form-check-input" />
+                        <label class="form-check-label">Cuenta activa</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Guardar" class="btn btn-primary" asp-page-handler="BtGuardar" />
+                <input type="submit" value="Cancelar" class="btn btn-secondary" asp-page-handler="BtConsultar" />
+            </div>
+        </div>
+    }
+
+    @if (Model.Borrar)
+    {
+        <div class="alert alert-warning mt-3">
+            ¿Quiere borrar <b>@Model.Actual</b>?
+            <input type="submit" value="Borrar" class="btn btn-danger btn-sm ms-2" asp-page-handler="BtBorrar" />
+            <input type="submit" value="Cancelar" class="btn btn-secondary btn-sm" asp-page-handler="BtConsultar" />
+        </div>
+    }
+
+    @if (!Model.Formulario)
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                    <th>Id</th>
+                    <th>Rol</th>
+                    <th>Nombre completo</th>
+                    <th>Cédula</th>
+                    <th>Correo</th>
+                    <th>Fecha de registro</th>
+                    <th>Cuenta activa</th>
+                    <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var elemento in Model.Lista)
+                    {
+                        <tr>
+                        <td>@elemento.Id</td>
+                        <td>@elemento._Rol</td>
+                        <td>@elemento.NombreCompleto</td>
+                        <td>@elemento.Cedula</td>
+                        <td>@elemento.Correo</td>
+                        <td>@elemento.FechaRegistro?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@(elemento.CuentaActiva ? "Sí" : "No")</td>
+                        <td>
+                            <input type="submit" value="Editar" class="btn btn-secondary btn-sm" asp-page-handler="BtEditar" asp-route-data="@elemento.Id" />
+                            <input type="submit" value="Borrar" class="btn btn-danger btn-sm" asp-page-handler="BtPregBorrar" asp-route-data="@elemento.Id" />
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</form>

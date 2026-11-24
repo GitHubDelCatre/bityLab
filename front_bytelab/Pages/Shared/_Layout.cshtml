@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ByteLab</title>
+    <link rel="icon" type="image/svg+xml" href="~/img/logo.svg" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Estilos", required: false)
+</head>
+<body>
+    <header class="no-imprimir">
+        <nav class="navbar navbar-expand-lg navbar-dark barra mb-4">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand" asp-page="/Index">
+                    <img src="~/img/logo.svg" alt="" width="28" height="28" class="me-1" /> ByteLab
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto">
+                        @if (Sesion.EstaLogueado(Context))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-page="/Index">Inicio</a></li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Roles", "Permisos", "RolesPermisos", "Usuarios", "Auditorias"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Seguridad</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "Roles"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Roles">Roles</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Permisos"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Permisos">Permisos</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "RolesPermisos"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/RolesPermisos">Permisos por rol</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Usuarios"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Usuarios">Usuarios</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Auditorias"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Auditorias">Auditorías</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Sucursales", "Empleados", "Clientes"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sedes y personal</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "Sucursales"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Sucursales">Sucursales</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Empleados"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Empleados">Empleados</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Clientes"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Clientes">Clientes</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Categorias", "Marcas", "Productos", "Resenas"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Catálogo</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "Categorias"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Categorias">Categorías</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Marcas"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Marcas">Marcas</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Productos"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Productos">Productos</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Resenas"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Resenas">Reseñas</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Inventarios", "Proveedores", "ComprasProductos", "DetallesOrdenesCompras"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Inventario y compras</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "Inventarios"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Inventarios">Inventarios</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Proveedores"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Proveedores">Proveedores</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "ComprasProductos"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/ComprasProductos">Órdenes de compra</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "DetallesOrdenesCompras"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/DetallesOrdenesCompras">Detalles de órdenes de compra</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Promociones", "Ventas", "DetallesVentas", "MetodosPago", "Pagos", "Devoluciones", "Garantias"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Ventas</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "Promociones"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Promociones">Promociones</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Ventas"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Ventas">Ventas</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "DetallesVentas"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/DetallesVentas">Detalles de ventas</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "MetodosPago"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/MetodosPago">Métodos de pago</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Pagos"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Pagos">Pagos</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Devoluciones"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Devoluciones">Devoluciones</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Garantias"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Garantias">Garantías</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "EmpresasPaqueteria", "Envios"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Logística</a>
+                                <ul class="dropdown-menu">
+                                @if (Sesion.TienePermiso(Context, "EmpresasPaqueteria"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/EmpresasPaqueteria">Empresas de paquetería</a></li>
+                                }
+                                @if (Sesion.TienePermiso(Context, "Envios"))
+                                {
+                                    <li><a class="dropdown-item" asp-page="/Ventanas/Envios">Envíos</a></li>
+                                }
+                                </ul>
+                            </li>
+                        }
+                        @if (Sesion.TieneAlguno(Context, "Reportes", "Mapa"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Herramientas</a>
+                                <ul class="dropdown-menu">
+                                    @if (Sesion.TienePermiso(Context, "Reportes"))
+                                    {
+                                        <li><a class="dropdown-item" asp-page="/Ventanas/Reportes">Reportes</a></li>
+                                    }
+                                    @if (Sesion.TienePermiso(Context, "Mapa"))
+                                    {
+                                        <li><a class="dropdown-item" asp-page="/Ventanas/Mapa">Mapa de sucursales</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    @if (Sesion.EstaLogueado(Context))
+                    {
+                        <form method="post" asp-page="/Index" asp-page-handler="BtCerrar" class="d-flex align-items-center gap-2">
+                            <span class="text-white-50 text-nowrap d-none d-xl-inline">@Sesion.NombreUsuario(Context) (@Sesion.NombreRol(Context))</span>
+                            <input type="submit" value="Cerrar sesión" class="btn btn-outline-light btn-sm" />
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted no-imprimir">
+        <div class="container">
+            &copy; 2026 - ByteLab - Tienda de Hardware
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
